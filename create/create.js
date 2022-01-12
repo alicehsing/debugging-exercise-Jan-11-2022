@@ -5,10 +5,10 @@ import {
     logout 
 } from '../fetch-utils.js';
 
-const form = document.querySelectorAll('.bunny-form');
+const form = document.querySelector('.bunny-form');
 const logoutButton = document.getElementById('logout');
 
-form.addEventListener(e => {
+form.addEventListener('submit', async(e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
@@ -26,13 +26,14 @@ form.addEventListener(e => {
 
 window.addEventListener('load', async() => {
     const select = document.querySelector('select');
-    const families = getFamilies();
+    const families = await getFamilies();
 
     for (let family of families) {
-        option.value = family.id;
-        option.textContent = family.name;
+        const optionEl = document.createElement('option');
+        optionEl.value = family.id;
+        optionEl.textContent = family.name;
         
-        select.append(option);
+        select.append(optionEl);
     }
 });
 

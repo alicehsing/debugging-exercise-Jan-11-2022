@@ -7,27 +7,29 @@ import {
 
 checkAuth();
 
-const familiesEl = document.querySelector('families-container');
+const familiesEl = document.querySelector('.families-container');
 const logoutButton = document.getElementById('logout');
 
-logoutButton.addEventListener(() => {
+logoutButton.addEventListener('click', () => {
     logout();
 });
 
 // I could refactor this into some render functions. However, it becomes complicated since I need to call displayFamilies from inside each bunny's click handler.
-function displayFamilies(families) {
+async function displayFamilies() {
+    const families = await getFamilies();
     familiesEl.textContent = '';
     
     for (let family of families) {
         const nameEl = document.createElement('h3');
         const bunniesEl = document.createElement('div');
+        const familyEl = document.createElement('div');
 
         bunniesEl.classList.add('bunnies');
         familyEl.classList.add('family');
 
         nameEl.textContent = family.name;
-
-        for (let rabbit of family.fuzzy_bunnies) {
+        familyEl.append(nameEl, bunniesEl);
+        for (let bunny of family.fuzzy_bunnies) {
             const bunnyEl = document.createElement('div');
 
             bunnyEl.classList.add('bunny');
@@ -40,9 +42,10 @@ function displayFamilies(families) {
 
                 displayFamilies(updatedFamilies);            
             });
+            bunniesEl.append(bunnyEl);
+            familyEl.append(nameEl, bunniesEl);
         }
-
-        familyEl.append(nameEl, bunniesEl);
+        
         familiesEl.append(familyEl);
     }
 }
